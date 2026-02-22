@@ -1,40 +1,22 @@
 /* src/app/globals.css */
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;700&display=swap');
-
-/* ═══════════════════════════════════
-   CSS ПЕРЕМЕННЫЕ
-═══════════════════════════════════ */
 :root {
   --bg-void: #07070d;
   --bg-primary: #0d0d18;
   --bg-secondary: #12121f;
   --bg-card: #161625;
   --bg-hover: #1e1e30;
-  
   --accent: #7c3aed;
   --accent-dim: #6d28d9;
   --accent-glow: rgba(124, 58, 237, 0.35);
-  --accent-subtle: rgba(124, 58, 237, 0.12);
-  
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --text-muted: #475569;
-  
   --border: rgba(255, 255, 255, 0.07);
   --border-accent: rgba(124, 58, 237, 0.3);
-  
-  --radius: 10px;
-  --radius-lg: 16px;
 }
 
-/* ═══════════════════════════════════
-   БАЗОВЫЕ СТИЛИ
-═══════════════════════════════════ */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -43,7 +25,6 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
 }
 
 body {
@@ -54,120 +35,61 @@ body {
   overflow-x: hidden;
 }
 
-/* Кастомный скролл */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-primary);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-dim);
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+.glass {
+  background: rgba(22, 22, 37, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
 }
 
-/* ═══════════════════════════════════
-   УТИЛИТЫ
-═══════════════════════════════════ */
-@layer components {
-  /* Стеклянный эффект */
-  .glass {
-    background: rgba(22, 22, 37, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border);
-  }
-  
-  /* Карточка аниме */
-  .anime-card {
-    @apply relative overflow-hidden rounded-xl cursor-pointer;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  .anime-card:hover {
-    transform: translateY(-6px) scale(1.02);
-    border-color: var(--border-accent);
-    box-shadow: 
-      0 20px 40px rgba(0, 0, 0, 0.5),
-      0 0 0 1px var(--border-accent),
-      0 0 30px var(--accent-glow);
-  }
-  
-  /* Кнопка */
-  .btn-primary {
-    @apply px-6 py-2.5 rounded-lg font-medium text-white;
-    background: linear-gradient(135deg, var(--accent), #5b21b6);
-    transition: all 0.2s;
-  }
-  
-  .btn-primary:hover {
-    filter: brightness(1.15);
-    box-shadow: 0 0 20px var(--accent-glow);
-  }
-  
-  /* Градиентный текст */
-  .gradient-text {
-    background: linear-gradient(135deg, #7c3aed, #60a5fa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  
-  /* Неоновое свечение */
-  .neon-glow {
-    box-shadow: 0 0 20px var(--accent-glow), 0 0 60px var(--accent-glow);
-  }
-  
-  /* Аура вокруг постера */
-  .poster-glow {
-    box-shadow: 0 0 40px rgba(124, 58, 237, 0.4);
-  }
+.anime-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  cursor: pointer;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ═══════════════════════════════════
-   АНИМАЦИИ
-═══════════════════════════════════ */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+.anime-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: var(--border-accent);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 30px var(--accent-glow);
 }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
-  50% { box-shadow: 0 0 40px var(--accent-glow), 0 0 80px var(--accent-glow); }
+.gradient-text {
+  background: linear-gradient(135deg, #7c3aed, #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+.btn-primary {
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: white;
+  background: linear-gradient(135deg, var(--accent), #5b21b6);
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
 }
 
-.shimmer {
-  background: linear-gradient(
-    90deg,
-    var(--bg-card) 25%,
-    var(--bg-hover) 50%,
-    var(--bg-card) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+.btn-primary:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 0 20px var(--accent-glow);
 }
 
-/* ═══════════════════════════════════
-   ПЛЕЕР
-═══════════════════════════════════ */
 .player-container {
   position: relative;
   width: 100%;
   aspect-ratio: 16/9;
   background: #000;
-  border-radius: var(--radius-lg);
+  border-radius: 16px;
   overflow: hidden;
 }
 
@@ -177,22 +99,10 @@ body {
   left: 0;
   right: 0;
   padding: 20px;
-  background: linear-gradient(
-    to top,
-    rgba(0,0,0,0.95) 0%,
-    rgba(0,0,0,0.7) 50%,
-    transparent 100%
-  );
-  opacity: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
   transition: opacity 0.3s;
 }
 
-.player-container:hover .player-controls,
-.player-container.paused .player-controls {
-  opacity: 1;
-}
-
-/* Прогресс-бар плеера */
 .progress-bar {
   position: relative;
   width: 100%;
@@ -203,13 +113,7 @@ body {
   transition: height 0.2s;
 }
 
-.progress-bar:hover {
-  height: 6px;
-}
-
-.progress-bar:hover .skip-zone {
-  opacity: 1;
-}
+.progress-bar:hover { height: 6px; }
 
 .progress-filled {
   height: 100%;
@@ -218,40 +122,31 @@ body {
   position: relative;
 }
 
-/* Зоны скипа на прогресс-баре */
 .skip-zone {
   position: absolute;
   top: 0;
   height: 100%;
   background: rgba(251, 191, 36, 0.5);
   border-radius: 2px;
-  opacity: 0;
-  transition: opacity 0.2s;
 }
 
-/* Кнопка скипа */
 .skip-button {
-  @apply px-5 py-2.5 rounded-lg font-semibold text-sm;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
   background: rgba(251, 191, 36, 0.15);
   border: 1px solid rgba(251, 191, 36, 0.5);
   color: #fbbf24;
   backdrop-filter: blur(10px);
   cursor: pointer;
   transition: all 0.2s;
-  animation: fadeInRight 0.3s ease;
 }
 
 .skip-button:hover {
   background: rgba(251, 191, 36, 0.3);
-  border-color: #fbbf24;
 }
 
-@keyframes fadeInRight {
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-/* Спиннер загрузки */
 .player-spinner {
   width: 50px;
   height: 50px;
@@ -261,6 +156,44 @@ body {
   animation: spin 0.8s linear infinite;
 }
 
+.shimmer {
+  background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-hover) 50%, var(--bg-card) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.volume-slider {
+  -webkit-appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
 }
