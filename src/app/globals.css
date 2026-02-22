@@ -1,26 +1,266 @@
-@import "tailwindcss";
+/* src/app/globals.css */
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;700&display=swap');
+
+/* ═══════════════════════════════════
+   CSS ПЕРЕМЕННЫЕ
+═══════════════════════════════════ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-void: #07070d;
+  --bg-primary: #0d0d18;
+  --bg-secondary: #12121f;
+  --bg-card: #161625;
+  --bg-hover: #1e1e30;
+  
+  --accent: #7c3aed;
+  --accent-dim: #6d28d9;
+  --accent-glow: rgba(124, 58, 237, 0.35);
+  --accent-subtle: rgba(124, 58, 237, 0.12);
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+  
+  --border: rgba(255, 255, 255, 0.07);
+  --border-accent: rgba(124, 58, 237, 0.3);
+  
+  --radius: 10px;
+  --radius-lg: 16px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ═══════════════════════════════════
+   БАЗОВЫЕ СТИЛИ
+═══════════════════════════════════ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-void);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Кастомный скролл */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-dim);
+}
+
+/* ═══════════════════════════════════
+   УТИЛИТЫ
+═══════════════════════════════════ */
+@layer components {
+  /* Стеклянный эффект */
+  .glass {
+    background: rgba(22, 22, 37, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+  }
+  
+  /* Карточка аниме */
+  .anime-card {
+    @apply relative overflow-hidden rounded-xl cursor-pointer;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .anime-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    border-color: var(--border-accent);
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.5),
+      0 0 0 1px var(--border-accent),
+      0 0 30px var(--accent-glow);
+  }
+  
+  /* Кнопка */
+  .btn-primary {
+    @apply px-6 py-2.5 rounded-lg font-medium text-white;
+    background: linear-gradient(135deg, var(--accent), #5b21b6);
+    transition: all 0.2s;
+  }
+  
+  .btn-primary:hover {
+    filter: brightness(1.15);
+    box-shadow: 0 0 20px var(--accent-glow);
+  }
+  
+  /* Градиентный текст */
+  .gradient-text {
+    background: linear-gradient(135deg, #7c3aed, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Неоновое свечение */
+  .neon-glow {
+    box-shadow: 0 0 20px var(--accent-glow), 0 0 60px var(--accent-glow);
+  }
+  
+  /* Аура вокруг постера */
+  .poster-glow {
+    box-shadow: 0 0 40px rgba(124, 58, 237, 0.4);
+  }
+}
+
+/* ═══════════════════════════════════
+   АНИМАЦИИ
+═══════════════════════════════════ */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+  50% { box-shadow: 0 0 40px var(--accent-glow), 0 0 80px var(--accent-glow); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--bg-card) 25%,
+    var(--bg-hover) 50%,
+    var(--bg-card) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ═══════════════════════════════════
+   ПЛЕЕР
+═══════════════════════════════════ */
+.player-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.player-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.95) 0%,
+    rgba(0,0,0,0.7) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.player-container:hover .player-controls,
+.player-container.paused .player-controls {
+  opacity: 1;
+}
+
+/* Прогресс-бар плеера */
+.progress-bar {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: height 0.2s;
+}
+
+.progress-bar:hover {
+  height: 6px;
+}
+
+.progress-bar:hover .skip-zone {
+  opacity: 1;
+}
+
+.progress-filled {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  position: relative;
+}
+
+/* Зоны скипа на прогресс-баре */
+.skip-zone {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: rgba(251, 191, 36, 0.5);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* Кнопка скипа */
+.skip-button {
+  @apply px-5 py-2.5 rounded-lg font-semibold text-sm;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.5);
+  color: #fbbf24;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all 0.2s;
+  animation: fadeInRight 0.3s ease;
+}
+
+.skip-button:hover {
+  background: rgba(251, 191, 36, 0.3);
+  border-color: #fbbf24;
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Спиннер загрузки */
+.player-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
