@@ -2,8 +2,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
-import { Check, Clock } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { usePlayerStore } from '@/lib/store/playerStore';
 
 interface EpisodeListProps {
@@ -14,14 +13,16 @@ interface EpisodeListProps {
 }
 
 export default function EpisodeList({
-  episodes, currentEpisode, animeId, onEpisodeSelect,
+  episodes,
+  currentEpisode,
+  animeId,
+  onEpisodeSelect,
 }: EpisodeListProps) {
   const [filter, setFilter] = useState('');
   const { watchHistory } = usePlayerStore();
   const currentRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    // Скроллим к текущему эпизоду
     currentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, [currentEpisode]);
 
@@ -31,48 +32,44 @@ export default function EpisodeList({
     ep.title?.toLowerCase().includes(filter.toLowerCase())
   );
 
-  const getProgress = (epNumber: number) => {
-    const history = watchHistory[animeId];
-    if (!history) return null;
-    if (history.episode > epNumber) return 100;
-    if (history.episode === epNumber) return null; // Есть прогресс
-    return null;
-  };
-
   const isWatched = (epNumber: number) => {
     const history = watchHistory[animeId];
     return history && history.episode > epNumber;
   };
 
   return (
-    <div className="bg-[var(--bg-card)] border border-white/5 rounded-2xl
-                    flex flex-col h-[calc(100vh-200px)] sticky top-24">
+    <div
+      className="flex flex-col rounded-2xl border border-white/5"
+      style={{
+        background: 'var(--bg-card)',
+        height: 'calc(100vh - 200px)',
+        position: 'sticky',
+        top: '96px',
+      }}
+    >
       {/* Хедер */}
       <div className="p-4 border-b border-white/5">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-white">
-            Эпизоды
-          </h3>
-          <span className="text-xs text-slate-500">
+          <h3 className="font-semibold text-white">Эпизоды</h3>
+          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
             {episodes.length} серий
           </span>
         </div>
-
-        {/* Фильтр */}
         <input
           type="text"
           placeholder="Поиск серии..."
           value={filter}
           onChange={e => setFilter(e.target.value)}
-          className="w-full bg-white/5 border border-white/5 rounded-lg
-                     px-3 py-2 text-sm text-white placeholder-slate-500
-                     focus:outline-none focus:border-violet-500/50 transition-colors"
+          className="w-full px-3 py-2 rounded-lg text-sm text-white
+                     placeholder-slate-500 focus:outline-none
+                     border border-white/5 focus:border-violet-500/50 transition-colors"
+          style={{ background: 'rgba(255,255,255,0.05)' }}
         />
       </div>
 
       {/* Список */}
       <div className="flex-1 overflow-y-auto p-2">
-        {filtered.map((ep) => {
+        {filtered.map(ep => {
           const isCurrent = ep.number === currentEpisode;
           const watched = isWatched(ep.number);
 
@@ -81,52 +78,65 @@ export default function EpisodeList({
               key={ep.id || ep.number}
               ref={isCurrent ? currentRef : undefined}
               onClick={() => onEpisodeSelect?.(ep.number)}
-              className={`
-                w-full flex items-center gap-3 p-3 rounded-xl text-left
-                transition-all mb-1 group
-                ${isCurrent
-                  ? 'bg-violet-600/20 border border-violet-500/30'
-                  : 'hover:bg-white/5 border border-transparent'
-                }
-              `}
+              className="w-full flex items-center gap-3 p-3 rounded-xl text-left
+                         transition-all mb-1 border"
+              style={{
+                background: isCurrent ? 'rgba(124,58,237,0.2)' : 'transparent',
+                borderColor: isCurrent ? 'rgba(124,58,237,0.3)' : 'transparent',
+              }}
             >
-              {/* Номер/иконка */}
-              <div className={`
-                w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold
-                shrink-0 transition-all
-                ${isCurrent
-                  ? 'bg-violet-600 text-white'
-                  : watched
-                    ? 'bg-green-900/30 text-green-400'
-                    : 'bg-white/5 text-slate-400 group-hover:bg-white/10'
-                }
-              `}>
+              {/* Номер */}
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center
+                           text-xs font-bold shrink-0"
+                style={{
+                  background: isCurrent
+                    ? '#7c3aed'
+                    : watched
+                    ? 'rgba(34,197,94,0.2)'
+                    : 'rgba(255,255,255,0.05)',
+                  color: isCurrent
+                    ? 'white'
+                    : watched
+                    ? '#4ade80'
+                    : 'var(--text-secondary)',
+                }}
+              >
                 {watched ? <Check size={14} /> : ep.number}
               </div>
 
               {/* Текст */}
               <div className="flex-1 min-w-0">
-                <p className={`
-                  text-sm font-medium truncate
-                  ${isCurrent ? 'text-violet-300' : watched ? 'text-slate-400' : 'text-slate-200'}
-                `}>
+                <p
+                  className="text-sm font-medium truncate"
+                  style={{
+                    color: isCurrent
+                      ? '#c4b5fd'
+                      : watched
+                      ? 'var(--text-muted)'
+                      : 'var(--text-primary)',
+                  }}
+                >
                   {ep.title || `Серия ${ep.number}`}
                 </p>
                 {ep.airDate && (
-                  <p className="text-xs text-slate-600 mt-0.5">{ep.airDate}</p>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                    {ep.airDate}
+                  </p>
                 )}
               </div>
 
-              {/* Воспроизводится */}
+              {/* Индикатор воспроизведения */}
               {isCurrent && (
-                <div className="flex gap-0.5 shrink-0">
+                <div className="flex gap-0.5 shrink-0 items-end h-4">
                   {[0, 1, 2].map(i => (
                     <div
                       key={i}
-                      className="w-0.5 bg-violet-400 rounded-full animate-bounce"
+                      className="w-0.5 rounded-full animate-bounce"
                       style={{
-                        height: `${12 + i * 4}px`,
-                        animationDelay: `${i * 0.15}s`
+                        height: `${8 + i * 4}px`,
+                        background: '#7c3aed',
+                        animationDelay: `${i * 0.15}s`,
                       }}
                     />
                   ))}
@@ -135,6 +145,12 @@ export default function EpisodeList({
             </button>
           );
         })}
+
+        {filtered.length === 0 && (
+          <div className="text-center py-8" style={{ color: 'var(--text-muted)' }}>
+            Серии не найдены
+          </div>
+        )}
       </div>
     </div>
   );
